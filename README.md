@@ -18,3 +18,21 @@
 ```
 
 와 같이 import 하면 css 파일에 작성한 속성이 `style` Object 형태로 변환됨
+
+### SSR
+
+```tsx
+export const getServerSideProps = () => {
+  // 서버사이드에서 실행
+  const data = "hello";
+  return {
+    props: {
+      data,
+    },
+  };
+};
+
+export default function Home({ data }) {
+  // 서버사이드와 클라이언트사이드에서 각각 실행
+}
+```
