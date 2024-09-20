@@ -7,3 +7,14 @@
   ```
   router.prefetch('/page')
   ```
+
+### Styling
+
+- Next.js 에서 일반 css 파일을 App 파일을 제외한 다른 곳에서 import 불가
+- 따라서 App 파일이 아닌 곳에서 import 하기 위해서는 css 파일 이름을 `.module.css` 형태로 바꾸고, 해당 파일에서
+
+```
+ import style from "~.module.css"
+```
+
+와 같이 import 하면 css 파일에 작성한 속성이 `style` Object 형태로 변환됨
