@@ -74,3 +74,9 @@ export const getStaticPaths = () => {
   };
 };
 ```
+
+#### fallback 옵션
+
+- `false` : 즉시 에러(404) 반환
+- `"blocking"` : 즉시 페이지 생성(SSR)
+- `true` : 즉시 페이지 생성 + 임시로 페이지 보내줌

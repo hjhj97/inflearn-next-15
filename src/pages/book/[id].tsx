@@ -1,6 +1,7 @@
 import { GetServerSidePropsContext, InferGetStaticPropsType } from "next";
 import style from "./[id].module.css";
 import fetchOneBook from "@/lib/fetch-one-book";
+import { useRouter } from "next/router";
 
 export const getStaticPaths = () => {
   return {
@@ -13,6 +14,12 @@ export const getStaticProps = async (context: GetServerSidePropsContext) => {
   const id = context.params!.id;
   const book = await fetchOneBook(Number(id));
 
+  if (!book) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: { book },
   };
@@ -20,7 +27,11 @@ export const getStaticProps = async (context: GetServerSidePropsContext) => {
 export default function Page({
   book,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const router = useRouter();
+
+  if (router.isFallback) return "Loading...";
   if (!book) return "Error";
+
   const { title, subTitle, description, author, publisher, coverImgUrl } = book;
   return (
     <div className={style.container}>
