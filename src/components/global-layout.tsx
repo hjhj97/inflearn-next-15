@@ -1,0 +1,16 @@
+import Link from "next/link";
+import { ReactNode } from "react";
+import style from "./global-layout.module.css";
+
+export default function GlobalLayout({ children }: { children: ReactNode }) {
+  console.log(style);
+  return (
+    <div className={style.container}>
+      <header className={style.header}>
+        <Link href="/">📚 BOOKS</Link>
+      </header>
+      <main className={style.main}>{children}</main>
+      <footer className={style.footer}>Develped By Neon</footer>
+    </div>
+  );
+}
