@@ -21,9 +21,11 @@
 
 ### SSR
 
+- 클라이언트가 페이지를 요청할 때마다 서버 로직이 실행되어 페이지를 렌더링함
+
 ```tsx
 export const getServerSideProps = () => {
-  // 서버사이드에서 실행
+  // 서버사이드에서 실행, 클라이언트가 요청할 때마다 실행
   const data = "hello";
   return {
     props: {
@@ -32,7 +34,43 @@ export const getServerSideProps = () => {
   };
 };
 
-export default function Home({ data }) {
+export default function Home({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // 서버사이드와 클라이언트사이드에서 각각 실행
 }
+```
+
+### SSG
+
+- 빌드타임에 미리 페이지를 렌더링해놓고, 클라이언트가 요청하면 렌더링된 파일을 먼저 보냄
+- 검색 페이지처럼 어떤 컨텐츠가 담길지 예측할 수 없는 페이지는 SSG로 불가능, CSR로 대체해야함
+
+```tsx
+export const getStaticProps = () => {
+  // 서버사이드에서 실행, 빌드타임 때 단 1번만 실행됨
+  const data = "hello";
+  return {
+    props: {
+      data,
+    },
+  };
+};
+
+export default function Home({
+  data,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  // 서버사이드와 클라이언트사이드에서 각각 실행
+}
+```
+
+- dynamic path를 가질 경우, `getStaticPaths` 함수에서 어떤 종류의 경로를 가지는지 명시해줘야함.
+
+```tsx
+export const getStaticPaths = () => {
+  return {
+    paths: [{ params: { id: "1" } }, { params: { id: "2" } }],
+    fallback: false,
+  };
+};
 ```

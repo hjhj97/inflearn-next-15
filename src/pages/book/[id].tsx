@@ -1,10 +1,15 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetStaticPropsType } from "next";
 import style from "./[id].module.css";
 import fetchOneBook from "@/lib/fetch-one-book";
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
+export const getStaticPaths = () => {
+  return {
+    paths: [{ params: { id: "1" } }, { params: { id: "2" } }],
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async (context: GetServerSidePropsContext) => {
   const id = context.params!.id;
   const book = await fetchOneBook(Number(id));
 
@@ -14,10 +19,9 @@ export const getServerSideProps = async (
 };
 export default function Page({
   book,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   if (!book) return "Error";
-  const { id, title, subTitle, description, author, publisher, coverImgUrl } =
-    book;
+  const { title, subTitle, description, author, publisher, coverImgUrl } = book;
   return (
     <div className={style.container}>
       <div
