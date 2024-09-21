@@ -1,5 +1,7 @@
 ## Next.js App Router
 
+[한 입 크기로 잘라먹는 Next.js](https://www.inflearn.com/course/%ED%95%9C%EC%9E%85-%ED%81%AC%EA%B8%B0-nextjs)
+
 ### Prefetch
 
 - `<Link>` 컴포넌트로 불러오는 페이지들은 자동적으로 prefetch 된다. 비활성화 하기 위해서는 `<Link prefetch={false} />` 로 지정한다.
@@ -120,4 +122,17 @@ export default async function handler(
     res.status(500).send("Revalidation Failed");
   }
 }
+```
+
+### SEO 설정
+
+- `Head` 컴포넌트를 통해 설정 가능
+
+```tsx
+<Head>
+  <title>한입북스</title>
+  <meta property="og:image" content="/thumbnail.png" />
+  <meta property="og:title" content="한입북스" />
+  <meta property="og:description" content="한입북스 입니다" />
+</Head>
 ```
