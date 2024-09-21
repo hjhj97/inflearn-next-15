@@ -80,3 +80,44 @@ export const getStaticPaths = () => {
 - `false` : 즉시 에러(404) 반환
 - `"blocking"` : 즉시 페이지 생성(SSR)
 - `true` : 즉시 페이지 생성 + 임시로 페이지 보내줌
+
+### ISR
+
+```tsx
+export const getStaticProps = async () => {
+  const [allBooks, recommendedBooks] = await Promise.all([
+    fetchBooks(),
+    fetchRandomBooks(),
+  ]);
+
+  return {
+    props: {
+      allBooks,
+      recommendedBooks,
+    },
+    revalidate: 3, // 3초 주기로 재생성 -> ISR
+  };
+};
+```
+
+#### On-demand ISR
+
+- 시간 경과에 따라 페이지를 재생성 하는 방식 대신, 요청에 따라서 능동적으로 페이지를 재생성 가능
+- api route 에서 `res.reavalidate(path)` 호출
+
+```tsx
+// api/revalidate.ts
+import { NextApiRequest, NextApiResponse } from "next";
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    await res.revalidate("/");
+    return res.json({ revalidate: true });
+  } catch (error) {
+    res.status(500).send("Revalidation Failed");
+  }
+}
+```
